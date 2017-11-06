@@ -2,6 +2,8 @@ package org.androidtown.dietapp.Main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -180,11 +182,14 @@ public class MainActivity extends AppCompatActivity {
         calorie_pbar.setMax(100);
         progress = todayCal*100;
         progress = progress/basicCal;
+
+
         calorie_pbar.setProgress(progress);
         percentage_view.setText(progress + "%");
         if(progress <= 100){
+            calorie_pbar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FFFACC35")));
         }else{
-
+            calorie_pbar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FF1100")));
         }
     }
 
