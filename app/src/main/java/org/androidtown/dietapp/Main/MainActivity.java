@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.androidtown.dietapp.Auth.AuthMainActivity;
 import org.androidtown.dietapp.Auth.EmailPasswordActivity;
 import org.androidtown.dietapp.Auth.UserInfoActivity;
 import org.androidtown.dietapp.Chart.ChartActivity;
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth mAuth= FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser(); //위로뺌;
         if(user==null) {
-            Intent AuthIntent= new Intent(MainActivity.this, EmailPasswordActivity.class);
+            Intent AuthIntent= new Intent(MainActivity.this, AuthMainActivity.class);
             startActivity(AuthIntent);
             user=mAuth.getCurrentUser();
         }else {
@@ -181,6 +182,10 @@ public class MainActivity extends AppCompatActivity {
         progress = progress/basicCal;
         calorie_pbar.setProgress(progress);
         percentage_view.setText(progress + "%");
+        if(progress <= 100){
+        }else{
+
+        }
     }
 
     private void updateHistoryList() {
