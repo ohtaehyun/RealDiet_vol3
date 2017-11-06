@@ -25,6 +25,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':chart')
+    compile project(':library')
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
@@ -35,8 +37,8 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.firebaseui:firebase-ui-storage:0.6.0'
     testCompile 'junit:junit:4.12'
-    compile project(':library')
 }
+
 
 
 

@@ -54,6 +54,9 @@ public class EmailPasswordActivity extends BaseActivity implements
         setContentView(R.layout.activity_emailpassword);
 
         // Views
+        Intent AuthMainIntent=new Intent(EmailPasswordActivity.this,AuthMainActivity.class);
+        startActivity(AuthMainIntent);
+
         mStatusTextView = (TextView) findViewById(R.id.status);
         mDetailTextView = (TextView) findViewById(R.id.detail);
         mEmailField = (EditText) findViewById(R.id.field_email);
