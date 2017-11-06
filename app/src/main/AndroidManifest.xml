@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,10 +26,10 @@
         <activity android:name=".Chart.ChartActivity" />
         <activity android:name=".Chart.ViewCalendarActivity" />
         <activity android:name=".Chart.ViewAllCalendarActivity"/>
-        <activity android:name=".EmailPasswordActivity" />
-        <activity android:name=".UserInfoActivity" />
-        <activity android:name=".MenuActivity" />
-        <activity android:name=".ItemAddActivity">
+        <activity android:name=".Auth.EmailPasswordActivity" />
+        <activity android:name=".Auth.UserInfoActivity" />
+        <activity android:name=".Menu.MenuActivity" />
+        <activity android:name=".Menu.ItemAddActivity">
         </activity>
 
     </application>

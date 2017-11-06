@@ -1,4 +1,4 @@
-package org.androidtown.dietapp;
+package org.androidtown.dietapp.Menu;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -23,6 +23,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import org.androidtown.dietapp.DTO.FoodItem;
+import org.androidtown.dietapp.R;
 
 import java.io.IOException;
 import java.util.UUID;

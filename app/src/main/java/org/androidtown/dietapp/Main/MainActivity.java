@@ -1,4 +1,4 @@
-package org.androidtown.dietapp;
+package org.androidtown.dietapp.Main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,7 +21,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.androidtown.dietapp.Auth.EmailPasswordActivity;
+import org.androidtown.dietapp.Auth.UserInfoActivity;
 import org.androidtown.dietapp.Chart.ChartActivity;
+import org.androidtown.dietapp.DTO.FoodItem;
+import org.androidtown.dietapp.Menu.MenuActivity;
+import org.androidtown.dietapp.R;
 
 import java.util.ArrayList;
 import java.util.List;

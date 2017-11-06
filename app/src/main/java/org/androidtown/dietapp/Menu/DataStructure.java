@@ -1,4 +1,6 @@
-package org.androidtown.dietapp;
+package org.androidtown.dietapp.Menu;
+
+import org.androidtown.dietapp.DTO.FoodItem;
 
 import java.util.ArrayList;
 import java.util.Collections;

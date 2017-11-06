@@ -1,4 +1,4 @@
-package org.androidtown.dietapp;
+package org.androidtown.dietapp.DTO;
 
 import java.util.ArrayList;
 import java.util.List;

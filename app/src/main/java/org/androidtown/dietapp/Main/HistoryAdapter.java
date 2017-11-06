@@ -1,10 +1,13 @@
-package org.androidtown.dietapp;
+package org.androidtown.dietapp.Main;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.androidtown.dietapp.DTO.FoodItem;
+import org.androidtown.dietapp.R;
 
 import java.util.List;
 

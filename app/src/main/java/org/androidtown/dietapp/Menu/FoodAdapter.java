@@ -1,4 +1,4 @@
-package org.androidtown.dietapp;
+package org.androidtown.dietapp.Menu;
 
 import android.content.Context;
 import android.support.design.widget.Snackbar;
@@ -11,10 +11,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.androidtown.dietapp.DTO.FoodItem;
+import org.androidtown.dietapp.R;
 
 import java.util.ArrayList;
 import java.util.List;

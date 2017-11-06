@@ -1,8 +1,10 @@
-package org.androidtown.dietapp;
+package org.androidtown.dietapp.Auth;
 
 import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
+
+import org.androidtown.dietapp.R;
 
 public class BaseActivity extends AppCompatActivity {
 

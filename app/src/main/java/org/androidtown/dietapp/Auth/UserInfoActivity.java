@@ -1,4 +1,4 @@
-package org.androidtown.dietapp;
+package org.androidtown.dietapp.Auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.androidtown.dietapp.DTO.UsersItem;
+import org.androidtown.dietapp.Main.MainActivity;
+import org.androidtown.dietapp.R;
 
 public class UserInfoActivity extends AppCompatActivity {
     TextView textViewName;
