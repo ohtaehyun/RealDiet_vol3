@@ -1,14 +1,15 @@
+// 차트 전체보기.
+
 package org.androidtown.dietapp.Chart;
 
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,96 +30,79 @@ import org.androidtown.dietapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by zidru on 2017-09-18.
+ * Created by zidru on 2017-09-27.
  */
 
-public class ViewCalendarActivity extends AppCompatActivity {
-    private DatabaseReference mDatabase;
-    float rat_carbo, rat_protein, rat_fat;
-    int carbo,protein,fat;
-    String date;
-    int sum;
-    int contains;
-    ArrayList<FoodItem> userHistoryData ;
+public class ViewAllCalendarActivity_byPie extends android.support.v4.app.Fragment{
     private ViewGroup layoutGraphView;
+    private ViewGroup GraphView;
+    ArrayList<FoodItem> foods = new ArrayList<FoodItem>();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
+    int carbo,protein,fat;
+    int user_calorie;
     TextView textView;
 
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_calender);
-        textView = (TextView)findViewById(R.id.message_to_calender_viewer);
-
-        layoutGraphView = (ViewGroup) findViewById(R.id.pie_chart);
-        contains = 0; sum=0;
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        DatabaseReference userData = mDatabase.child("user").child(user.getUid());
-        DatabaseReference userHistoryRef = mDatabase.child("userHistory").child(user.getUid());
-
-        Intent intent = getIntent();
-        int year = intent.getExtras().getInt("Year");
-        int month = intent.getExtras().getInt("Month")+1;
-        int day = intent.getExtras().getInt("Day");
-
-        if(month<10 && day<10){
-            date = String.valueOf(year)+"0"+String.valueOf(month)+"0"+String.valueOf(day);
-        }else if(month<10 && day>=10){
-            date = String.valueOf(year)+"0"+String.valueOf(month)+String.valueOf(day);
-        }else if(day<10){
-            date = String.valueOf(year)+String.valueOf(month)+"0"+String.valueOf(day);
-        }else date = String.valueOf(year)+String.valueOf(month)+String.valueOf(day);
-
-        DatabaseReference UserHistory = userHistoryRef.child(date);
+        layoutGraphView = (ViewGroup) inflater.inflate(R.layout.activity_view_all_calendar_bypie, container, false);
+       GraphView = (ViewGroup) layoutGraphView.findViewById((R.id.view_all_calendar_bypie));
+        textView = (TextView)layoutGraphView.findViewById(R.id.text_int_viewCalendar_by_pie);
 
 
-        userHistoryData = new ArrayList<>();
+        DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference userRef = RootRef.child("user").child(uid).child("basicCalorie");
+        final DatabaseReference historyRef = RootRef.child("userHistory").child(uid);
 
-        UserHistory.addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                setzero();
-                int i=0;
-                userHistoryData.clear();
-                Log.d("","clear");
-
-                if(dataSnapshot.exists())
-                {
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        FoodItem foodItem = snapshot.getValue(FoodItem.class);
-                        userHistoryData.add(foodItem);
-                        setCarbo(getCarbo() + userHistoryData.get(i).getCarbohydrate());
-                        setProtein(getProtein() + userHistoryData.get(i).getProtein());
-                        setFat(getFat() + userHistoryData.get(i).getFat());
-                        setSum(sum + getCarbo() + getFat() + getProtein());
-                        Log.d("","contains");
-                        Toast.makeText(getApplicationContext(), String.valueOf(getCarbo()), Toast.LENGTH_SHORT).show();
-                        setContains(getContains() + 1);
-                    }
-                    setCircleGraph();
-
-                    rat_carbo =( (float)getCarbo()/ (float)getSum())*100;
-                    rat_fat = ( (float)getFat()/ (float)getSum())*100;
-                    rat_protein = ( (float)getProtein()/ (float)getSum())*100;
-
-                    theAdvise();
-
-                }else{
-                    Toast.makeText(getApplicationContext(), "선택하신 날짜에는 먹은 음식이 없습니다.", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                user_calorie = dataSnapshot.getValue(int.class);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
 
+        historyRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setCarbo(0);
+                setProtein(0);
+                setFat(0);
+                int j=0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    foods.clear();
+                    for(DataSnapshot snapshot_food : snapshot.getChildren()){
+                        FoodItem data = snapshot_food.getValue(FoodItem.class);
+                        foods.add(data);
+                        setCarbo(getCarbo() + foods.get(j).getCarbohydrate());
+                        setProtein(getProtein() + foods.get(j).getProtein());
+                        setFat(getFat() + foods.get(j).getFat());
+                        j++;
+                    }
+                    j=0;
+                }
+                setCircleGraph();
+                theAdvise();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        return layoutGraphView;
     }
 
+
     public void theAdvise(){
+
+        int sum = getCarbo() + getProtein() + getFat();
+        float rat_carbo =( (float)getCarbo()/ (float)sum)*100;
+        float rat_fat = ( (float)getFat()/ (float)sum)*100;
+        float rat_protein = ( (float)getProtein()/ (float)sum)*100;
         if(rat_carbo>=45){
             textView.setText("too many 탄수화물");
         }else if(rat_protein>=60){
@@ -133,10 +117,10 @@ public class ViewCalendarActivity extends AppCompatActivity {
             textView.setText("밀가루음식이나 흰쌀밥등이 아니라면 탄수화물은 식단의 30%는 먹는것이 좋습니다.");
         }else textView.setText("적당히 균형잡힌 식단이군요.");
     }
-
+    // drawing circle graph
     private void setCircleGraph() {
         CircleGraphVO vo = makeLineGraphAllSetting();
-        layoutGraphView.addView(new CircleGraphView(this,vo));
+        GraphView.addView(new CircleGraphView(getContext(),vo));
     }
 
     // make circle graph
@@ -169,7 +153,7 @@ public class ViewCalendarActivity extends AppCompatActivity {
         CircleGraphVO vo = new CircleGraphVO(paddingBottom, paddingTop, paddingLeft, paddingRight,marginTop, marginRight,radius, arrGraph);
 
         // circle Line
-        vo.setLineColor(Color.WHITE);
+        vo.setLineColor(Color.BLACK);
 
         // set text setting
         vo.setTextColor(Color.BLACK);
@@ -196,40 +180,24 @@ public class ViewCalendarActivity extends AppCompatActivity {
         return vo;
     }
 
-    public void setzero(){
-        setCarbo(0);
-        setProtein(0);
-        setFat(0);
-    }
-
-    public int getSum() {return sum;}
-    public void setSum(int sum) {this.sum = sum;}
-
-    public int getContains() {return contains;}
-
-    public void setContains(int contains) {this.contains = contains;}
-
+    // getter and setter
     public int getCarbo() {
         return carbo;
     }
-
     public void setCarbo(int carbo) {
         this.carbo = carbo;
     }
-
     public int getProtein() {
         return protein;
     }
-
     public void setProtein(int protein) {
         this.protein = protein;
     }
-
     public int getFat() {
         return fat;
     }
-
     public void setFat(int fat) {
         this.fat = fat;
     }
+
 }

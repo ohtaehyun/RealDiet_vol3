@@ -24,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.androidtown.dietapp.Auth.AuthMainActivity;
-import org.androidtown.dietapp.Auth.EmailPasswordActivity;
 import org.androidtown.dietapp.Auth.UserInfoActivity;
 import org.androidtown.dietapp.Chart.ChartActivity;
 import org.androidtown.dietapp.DTO.FoodItem;
