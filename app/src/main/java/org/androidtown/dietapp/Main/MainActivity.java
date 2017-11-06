@@ -37,7 +37,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "!!!!!!!!!!MAIN!!!!!";
+    private static final String TAG = "!!!!!!!!!!MAIN!!!!!!!!";
     //날짜 관련
     private long now;
     private SimpleDateFormat dateFormat;
@@ -64,11 +64,6 @@ public class MainActivity extends AppCompatActivity {
     //데이터베이스 끝
 
     //레이아웃
-    /*
-    private Button userInfo_btn;
-    private Button menu_btn;
-    private Button chart_btn;
-    */
     private BottomNavigationView bottomNav;
     private ProgressBar calorie_pbar;
     private TextView percentage_view;
@@ -152,36 +147,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-          /*
-        listener = new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                switch (v.getId())
-                {
-                    case R.id.btn_userinfo:
-                        Intent AuthIntent = new Intent(MainActivity.this,UserInfoActivity.class);
-                        startActivity(AuthIntent);
-                        initDatabase();
-                        finish();
-                        break;
-                    case R.id.btn_menu:
-                        Intent menuIntent = new Intent(MainActivity.this,MenuActivity.class);
-                        menuIntent.putExtra("dateStr",dateStr);
-                        startActivity(menuIntent);
-                        break;
-                    case R.id.btn_chart:
-                        Intent chartIntent = new Intent(MainActivity.this,ChartActivity.class);
-                        startActivity(chartIntent);
-                        break;
-                }
-            }
-        };
-        userInfo_btn.setOnClickListener(listener);
-        menu_btn.setOnClickListener(listener);
-        chart_btn.setOnClickListener(listener);
-        */
     }
 
 
