@@ -30,10 +30,10 @@ import org.androidtown.dietapp.DTO.FoodItem;
 import org.androidtown.dietapp.Menu.MenuActivity;
 import org.androidtown.dietapp.R;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -228,4 +228,18 @@ public class MainActivity extends AppCompatActivity {
         dateStr =  dateFormat.format(date);
     }
 
+    @Override
+    protected void onPostResume() {
+        /*
+            TODO:
+            이 부분에서 if문 안에를 채워줘
+            설명: 로그아웃 한 뒤에 다시 시작해야할듯 내가 할려다가 이부분은 대대적인 걔혁이 일어날거 같아서
+            못건드리겟음
+            tip:onstart로 옮겨서 다시 호출하게 불러줘도 될듯
+         */
+        if(user!=FirebaseAuth.getInstance().getCurrentUser()){
+
+        }
+        super.onPostResume();
+    }
 }

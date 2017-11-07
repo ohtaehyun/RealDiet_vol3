@@ -3,6 +3,7 @@ package org.androidtown.dietapp.Auth;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.androidtown.dietapp.DTO.UsersItem;
-import org.androidtown.dietapp.Main.MainActivity;
 import org.androidtown.dietapp.R;
 
 public class UserInfoActivity extends AppCompatActivity {
@@ -35,7 +35,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     Button buttonSubmit;
 
-    Button buttonSignIn;
+    Button buttonSignOut;
 
     DatabaseReference mRoofRef;
     DatabaseReference mUserRef;
@@ -48,6 +48,7 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d("UserInfo",user.getClass().toString());
         uid=user.getUid();
         mRoofRef = FirebaseDatabase.getInstance().getReference();
         mUserRef=mRoofRef.child("user").child(uid);
@@ -65,7 +66,7 @@ public class UserInfoActivity extends AppCompatActivity {
         editTextGender=(EditText)findViewById(R.id.editTextGender);
 
         buttonSubmit=(Button)findViewById(R.id.buttonSubmit);
-        buttonSignIn=(Button)findViewById(R.id.buttonSignin);
+        buttonSignOut=(Button)findViewById(R.id.buttonSignOut);
 
         mUserRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -101,21 +102,15 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         });
 
-        buttonSignIn.setOnClickListener(new View.OnClickListener() {
+        buttonSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent AuthIntent = new Intent(UserInfoActivity.this,EmailPasswordActivity.class);
-                startActivity(AuthIntent);
+                Intent AuthIntent = new Intent(UserInfoActivity.this,AuthMainActivity.class);
+                FirebaseAuth.getInstance().signOut();
+                startActivityForResult(AuthIntent,9101);
                 finish();
             }
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent UserInfoIntent=new Intent(UserInfoActivity.this,MainActivity.class);
-        startActivity(UserInfoIntent);
-        finish();
     }
 }
