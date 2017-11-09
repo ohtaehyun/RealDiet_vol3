@@ -64,6 +64,9 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
 
         // [START KAKAO SIGN IN]
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        // [START initialize_auth]
+        mAuth = FirebaseAuth.getInstance();
+        // [END initialize_auth]
         // [START config_signin]
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -77,9 +80,7 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
+
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.emailButton).setOnClickListener(this);
@@ -92,6 +93,7 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()){
             case R.id.sign_in_button:
                 showProgressDialog();
+                Log.d(TAG,"fuck google혹시몰라 한국어로 인식장애 해결 찡긋_<");
                 signIn();
                 break;
             case R.id.emailButton:
@@ -123,9 +125,6 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
                 // [START_EXCLUDE]
                 // [END_EXCLUDE]
             }
-        }
-        if(requestCode == 9101){
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         }
         Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data);
     }
@@ -174,7 +173,7 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
         final TaskCompletionSource<String> source = new TaskCompletionSource<>();
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://salty-caverns-92125.herokuapp.com/" + "/verifyToken";
+        String url = "https://salty-caverns-92125.herokuapp.com" + "/verifyToken";
         HashMap<String, String> validationObject = new HashMap<>();
         validationObject.put("token", kakaoAccessToken);
 
@@ -182,11 +181,9 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Log.d("카카오톡 에러","시작");
                     String firebaseToken = response.getString("firebase_token");
                     source.setResult(firebaseToken);
                 } catch (Exception e) {
-                    Log.d("카카오톡 에러","자체가 안됨");
                     source.setException(e);
                 }
 
@@ -194,7 +191,6 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("카카오톡 에러","이런식으로 에러뜸");
                 Log.e(TAG, error.toString());
                 source.setException(error);
             }
@@ -215,9 +211,10 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
      * Session callback class for Kakao Login. OnSessionOpened() is called after successful login.
      */
     private class KakaoSessionCallback implements ISessionCallback {
+
         @Override
         public void onSessionOpened() {
-            Toast.makeText(getApplicationContext(), "Successfully logged in to Kakao. Now creating or updating a Firebase User.", Toast.LENGTH_LONG).show();
+            showProgressDialog();
             String accessToken = Session.getCurrentSession().getAccessToken();
             getFirebaseJwt(accessToken).continueWithTask(new Continuation<String, Task<AuthResult>>() {
                 @Override
@@ -230,11 +227,14 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
+                        onStop();
+                        goToUserInfo();
                     } else {
                         Toast.makeText(getApplicationContext(), "Failed to create a Firebase user.", Toast.LENGTH_LONG).show();
                         if (task.getException() != null) {
                             Log.e(TAG, task.getException().toString());
                         }
+                        onStop();
                     }
                 }
             });
@@ -264,6 +264,12 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
         }
         return;
     }
+    /*
+
+
+
+
+    */
     ///KAKAOTALK METHOD END
 
 

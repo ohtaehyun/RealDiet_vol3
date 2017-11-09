@@ -107,10 +107,14 @@ public class UserInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent AuthIntent = new Intent(UserInfoActivity.this,AuthMainActivity.class);
                 FirebaseAuth.getInstance().signOut();
-                startActivityForResult(AuthIntent,9101);
                 finish();
             }
         });
+
+    }
+
+    @Override
+    public void onBackPressed() {
 
     }
 }
