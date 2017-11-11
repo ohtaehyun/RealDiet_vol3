@@ -88,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(AuthIntent);
             user=mAuth.getCurrentUser();
         }else {
-            database = FirebaseDatabase.getInstance();
-            basicCalRef = database.getReference().child("user").child(user.getUid()).child("basicCalorie");
-            myHistoryRef = database.getReference().child("userHistory").child(user.getUid()).child(dateStr);
+            initDatabase();
         }
 
         mainContext=this;
@@ -111,11 +109,6 @@ public class MainActivity extends AppCompatActivity {
         if(user!=mAuth.getCurrentUser())initDatabase();
         //데이터 베이스 끝
 
-        /*
-        userInfo_btn=(Button) findViewById(R.id.btn_userinfo);
-        menu_btn=(Button)findViewById(R.id.btn_menu);
-        chart_btn=(Button)findViewById(R.id.btn_chart);
-        */
         bottomNav = (BottomNavigationView)findViewById(R.id.bottom_nav);
         calorie_pbar=(ProgressBar)findViewById(R.id.pbar_calorie);
         percentage_view=(TextView)findViewById(R.id.view_percentage);
@@ -230,16 +223,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPostResume() {
-        /*
-            TODO:
-            이 부분에서 if문 안에를 채워줘
-            설명: 로그아웃 한 뒤에 다시 시작해야할듯 내가 할려다가 이부분은 대대적인 걔혁이 일어날거 같아서
-            못건드리겟음
-            tip:onstart로 옮겨서 다시 호출하게 불러줘도 될듯
-         */
-        if(user!=FirebaseAuth.getInstance().getCurrentUser()){
 
-        }
         super.onPostResume();
+        if(user!=FirebaseAuth.getInstance().getCurrentUser()){
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            if(user==null) {
+                Intent AuthIntent= new Intent(MainActivity.this, AuthMainActivity.class);
+                startActivity(AuthIntent);
+                user=FirebaseAuth.getInstance().getCurrentUser();
+            }else {
+                initDatabase();
+            }
+        }
+        updateHistoryList();
     }
 }
