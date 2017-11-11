@@ -14,9 +14,10 @@ public class FoodItem implements Comparable<FoodItem>{
     public int carbohydrate;
     public int protein;
     public String uid;
+    public int frequency;
 
     public FoodItem() {
-
+        setFrequency(0);
     }
 
     public FoodItem(String uid,String category, String name,int calorie, int carbohydrate, int protein, int fat) {
@@ -93,6 +94,12 @@ public class FoodItem implements Comparable<FoodItem>{
     {
         this.uid=uid;
     }
+
+    public void setFrequency(int Frequency){ this.frequency = Frequency; }
+
+    public int getFrequency(){ return frequency; }
+
+    public void plusFrequency(){ setFrequency(getFrequency()+1);}
 
     //getter setter end
 

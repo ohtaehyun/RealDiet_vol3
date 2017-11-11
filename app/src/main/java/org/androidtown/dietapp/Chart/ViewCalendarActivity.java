@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,29 +35,36 @@ import java.util.List;
 
 public class ViewCalendarActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
+
+    //탄단지
     float rat_carbo, rat_protein, rat_fat;
     int carbo,protein,fat;
+
+    // 파이어베이스에 검색할 날짜
     String date;
-    int sum;
-    int contains;
-    ArrayList<FoodItem> userHistoryData ;
+
+    // 탄단지 합계및,
+    int sum = 0;
+
+    //  뷰
     private ViewGroup layoutGraphView;
     TextView textView;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_view_calender);
         textView = (TextView)findViewById(R.id.message_to_calender_viewer);
 
         layoutGraphView = (ViewGroup) findViewById(R.id.pie_chart);
-        contains = 0; sum=0;
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         DatabaseReference userData = mDatabase.child("user").child(user.getUid());
         DatabaseReference userHistoryRef = mDatabase.child("userHistory").child(user.getUid());
 
+        // 인텐트로 넘어온 날짜값을 받아 문자열로 제작
         Intent intent = getIntent();
         int year = intent.getExtras().getInt("Year");
         int month = intent.getExtras().getInt("Month")+1;
@@ -72,34 +78,26 @@ public class ViewCalendarActivity extends AppCompatActivity {
             date = String.valueOf(year)+String.valueOf(month)+"0"+String.valueOf(day);
         }else date = String.valueOf(year)+String.valueOf(month)+String.valueOf(day);
 
+        // 완성된 날짜를 이용한 레퍼런스생성
         DatabaseReference UserHistory = userHistoryRef.child(date);
-
-
-        userHistoryData = new ArrayList<>();
 
         UserHistory.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // 탄단지 초기화 및 리스트 초기화
                 setzero();
                 int i=0;
-                userHistoryData.clear();
-                Log.d("","clear");
-
+                // 해당날짜에 데이터가 있을경우에만 fooditem을 받아와 리스트에 등록.
                 if(dataSnapshot.exists())
                 {
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         FoodItem foodItem = snapshot.getValue(FoodItem.class);
-                        userHistoryData.add(foodItem);
-                        setCarbo(getCarbo() + userHistoryData.get(i).getCarbohydrate());
-                        setProtein(getProtein() + userHistoryData.get(i).getProtein());
-                        setFat(getFat() + userHistoryData.get(i).getFat());
+                        setCarbo(getCarbo() + foodItem.getCarbohydrate());
+                        setProtein(getProtein() + foodItem.getProtein());
+                        setFat(getFat() + foodItem.getFat());
                         setSum(sum + getCarbo() + getFat() + getProtein());
-                        Log.d("","contains");
-                        Toast.makeText(getApplicationContext(), String.valueOf(getCarbo()), Toast.LENGTH_SHORT).show();
-                        setContains(getContains() + 1);
                     }
                     setCircleGraph();
-
                     rat_carbo =( (float)getCarbo()/ (float)getSum())*100;
                     rat_fat = ( (float)getFat()/ (float)getSum())*100;
                     rat_protein = ( (float)getProtein()/ (float)getSum())*100;
@@ -118,6 +116,7 @@ public class ViewCalendarActivity extends AppCompatActivity {
 
     }
 
+    // 조언
     public void theAdvise(){
         if(rat_carbo>=45){
             textView.setText("too many 탄수화물");
@@ -196,39 +195,31 @@ public class ViewCalendarActivity extends AppCompatActivity {
         return vo;
     }
 
+    //탄단지 초기화
     public void setzero(){
         setCarbo(0);
         setProtein(0);
         setFat(0);
     }
 
+    // getter and setter
     public int getSum() {return sum;}
     public void setSum(int sum) {this.sum = sum;}
-
-    public int getContains() {return contains;}
-
-    public void setContains(int contains) {this.contains = contains;}
-
     public int getCarbo() {
         return carbo;
     }
-
     public void setCarbo(int carbo) {
         this.carbo = carbo;
     }
-
     public int getProtein() {
         return protein;
     }
-
     public void setProtein(int protein) {
         this.protein = protein;
     }
-
     public int getFat() {
         return fat;
     }
-
     public void setFat(int fat) {
         this.fat = fat;
     }

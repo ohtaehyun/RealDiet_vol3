@@ -24,7 +24,7 @@
 
     <TextView
         android:layout_gravity="center"
-        android:background="@color/cardview_light_background"
+        android:background="@drawable/back"
         android:id="@+id/text_int_viewCalendar_by_pie"
         android:layout_width="336dp"
         android:layout_height="70dp"

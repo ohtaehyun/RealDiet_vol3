@@ -76,7 +76,10 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
                         setSum_of_calorie(j,getSum_of_calorie(j)+datas.get(i).getCalorie());
                         i++;
                     }
-                    j++;
+                    //30일까지만
+                    if(j>=30) {
+                        break;
+                    }else j++;
                     setDates(getDates()+1);
                 }
                 userRef.addValueEventListener(new ValueEventListener() {
