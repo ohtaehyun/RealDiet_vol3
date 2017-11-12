@@ -12,13 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="40dp">
 
+
         <Button
             android:id="@+id/buttonSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:text="barcode" />
 
         <EditText
             android:id="@+id/edit"
@@ -28,7 +29,6 @@
             android:layout_alignParentTop="true"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name"
             tools:layout_editor_absoluteX="2dp"
             tools:layout_editor_absoluteY="3dp" />
 
