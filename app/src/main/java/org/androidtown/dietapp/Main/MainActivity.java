@@ -118,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         updateHistoryList();
         progress=0;
         setProgress();
+
+        adapter.setHistoryRef(myHistoryRef);
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -233,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 user=FirebaseAuth.getInstance().getCurrentUser();
             }else {
                 initDatabase();
+                adapter.setHistoryRef(myHistoryRef);
             }
         }
         updateHistoryList();

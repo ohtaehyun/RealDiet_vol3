@@ -7,17 +7,27 @@ import android.support.annotation.NonNull;
  */
 
 public class FoodItem implements Comparable<FoodItem>{
-    public String category;
-    public String name;
-    public int calorie;
-    public int fat;
-    public int carbohydrate;
-    public int protein;
-    public String uid;
-    public int frequency;
+    private String category;
+    private String name;
+    private int calorie;
+    private int fat;
+    private int carbohydrate;
+    private int protein;
+    private String uid;
+    private int frequency;
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public FoodItem() {
         setFrequency(0);
+        key = "1";
     }
 
     public FoodItem(String uid,String category, String name,int calorie, int carbohydrate, int protein, int fat) {
@@ -28,6 +38,7 @@ public class FoodItem implements Comparable<FoodItem>{
         this.carbohydrate = carbohydrate;
         this.protein = protein;
         this.calorie = calorie;
+        key="1";
     }
 
     @Override
