@@ -3,7 +3,7 @@ package org.androidtown.dietapp.Menu;
 import org.androidtown.dietapp.DTO.FoodItem;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -33,13 +33,15 @@ public class DataStructure {
     }
 
     public void sort(){
-        Collections.sort(foodList, new Comparator<FoodItem>() {
+        Comparator<FoodItem> foodItemComparator=new Comparator<FoodItem>(){
             @Override
             public int compare(FoodItem o1, FoodItem o2) {
-                // TODO Auto-generated method stub
                 return o1.getName().compareTo(o2.getName());
             }
-        });
+        };
+        FoodItem[] changedArray=foodList.toArray(new FoodItem[]{});
+        TimSort.sort(changedArray,foodItemComparator);
+        foodList=new ArrayList<>(Arrays.asList(changedArray));
     }
 
     public ArrayList<FoodItem> search(String searchedString){
@@ -49,5 +51,6 @@ public class DataStructure {
         }
         return searchList;
     }
+
 }
 

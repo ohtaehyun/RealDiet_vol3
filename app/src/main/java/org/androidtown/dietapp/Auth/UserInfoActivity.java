@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
 
     private RadioButton radioButtonFemale;
     private RadioButton radioButtonMale;
-
+    private CheckBox checkBox;
 
     private DatabaseReference mRoofRef;
     private DatabaseReference mUserRef;
@@ -97,6 +98,9 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         }else if(radioButtonFemale.isChecked()==false&&radioButtonMale.isChecked()==false){
             Toast.makeText(getApplicationContext(), "성별이 제대로 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
             return false;
+        }else if(checkBox.isChecked()==false){
+            Toast.makeText(getApplicationContext(), "체크를 하지 않았습니다.", Toast.LENGTH_LONG).show();
+            return false;
         }
         return true;
     }
@@ -118,6 +122,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
 
         buttonSubmit=(Button)findViewById(R.id.buttonSubmit);
         buttonSignOut=(Button)findViewById(R.id.buttonSignOut);
+        checkBox=(CheckBox)findViewById(R.id.checkBox);
     }
 
     @Override

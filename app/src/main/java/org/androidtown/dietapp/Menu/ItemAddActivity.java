@@ -150,7 +150,6 @@ public class ItemAddActivity extends AppCompatActivity {
             String filename = uuid + ".png";
             //storage 주소와 폴더 파일명을 지정해 준다.
             StorageReference storageRef = storage.getReference().child("foodImage/" + filename);
-            //올라가거라...
             storageRef.putFile(filePath)
                     //성공시
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
