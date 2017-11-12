@@ -225,8 +225,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPostResume() {
-
-        super.onPostResume();
         if(user!=FirebaseAuth.getInstance().getCurrentUser()){
             user = FirebaseAuth.getInstance().getCurrentUser();
             if(user==null) {
@@ -234,10 +232,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(AuthIntent);
                 user=FirebaseAuth.getInstance().getCurrentUser();
             }else {
+                getDate();
                 initDatabase();
                 adapter.setHistoryRef(myHistoryRef);
+                updateHistoryList();
+                setProgress();
             }
         }
-        updateHistoryList();
+
+        super.onPostResume();
     }
 }
