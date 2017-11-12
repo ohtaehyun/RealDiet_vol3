@@ -5,7 +5,7 @@
     >
 
     <item
-        android:title=""
+        android:title="돌아가기"
         android:id="@+id/action_to_all_view_left"
         android:enabled="true"
         app:showAsAction="ifRoom"></item>

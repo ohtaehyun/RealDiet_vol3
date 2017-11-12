@@ -17,7 +17,7 @@ import org.androidtown.dietapp.R;
 
 
 public class ViewHistoryDataActivity extends AppCompatActivity {
-    Toolbar toolbar;
+
      ViewAllCalendarActivity view_line;
      ViewAllCalendarActivity_byPie view_pie;
      ViewUserInterestActivity view_interst;
@@ -34,7 +34,7 @@ public class ViewHistoryDataActivity extends AppCompatActivity {
         view_interst = new ViewUserInterestActivity();
 
         // 초기화면
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_of_historyview, view_line).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_of_historyview, view_interst).commit();
 
         // bottomnavi 설정
         bottomNav = (BottomNavigationView)findViewById(R.id.bottom_nav_in_chartview);

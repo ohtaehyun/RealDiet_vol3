@@ -89,31 +89,20 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     for(DataSnapshot snapshot2 : snapshot.getChildren()) {
                         FoodItem foodItem = snapshot2.getValue(FoodItem.class);
-                        foodItem.setFrequency(0);
-                    }
-                }
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    for(DataSnapshot snapshot2 : snapshot.getChildren()) {
-                        FoodItem foodItem = snapshot2.getValue(FoodItem.class);
                         if(interestList.size()>0){
                             if(searching_food_uid(interestList,foodItem)){
-                               interestList.get(searching_food_uid_i(interestList,foodItem)).plusFrequency();
-                            }
-                            else {
+                             interestList.get(searching_food_uid_i(interestList,foodItem)).plusFrequency();
+                            } else {
+                                foodItem.setFrequency(1);
                                 interestList.add(foodItem);
-                                interestList.get(interestList.size()-1).setFrequency(1);
                             }
                         }else { interestList.add(foodItem);interestList.get(0).setFrequency(1);}
                     }
                 }
-                // 5개만 추린다다
 
                while(interestList.size()>5){
                     interestList.remove(interestList.size()-1);
                 }
-                order_by_frequency(interestList,0,interestList.size()-1);
-
-
                 adapter.notifyDataSetChanged();
             }
 
@@ -121,11 +110,10 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
     }
 
     private boolean searching_food_uid(List<FoodItem> L, FoodItem f){
-        for(int i=0; i<L.size()-1; i++){
+        for(int i=0; i<L.size(); i++){
             if(L.get(i).getName().equals(f.getName())){
                 return true;
             }
@@ -134,12 +122,14 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
     }
 
     private int searching_food_uid_i(List<FoodItem> L, FoodItem f){
-        for(int i=0; i<L.size()-1; i++){
+        int the_charge=0;
+        for(int i=0; i<L.size(); i++){
             if(L.get(i).getName().equals(f.getName())){
-                return i;
+                the_charge = i;
+                break;
             }
         }
-        return 0;
+        return the_charge;
     }
 
     //퀵정렬
@@ -151,6 +141,7 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
             order_by_frequency(L,q+1,r);
         }
     }
+
     private int partition(List<FoodItem> L, int p, int r){
         FoodItem temp = new FoodItem();
         int x = L.get(p).getFrequency();
@@ -160,6 +151,7 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
                 temp = L.get(j);
                 L.set(j,L.get(j+1));
                 L.set(j+1,temp);
+
             }
         }
         temp = L.get(r);

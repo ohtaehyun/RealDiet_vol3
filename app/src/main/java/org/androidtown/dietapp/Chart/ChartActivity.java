@@ -43,18 +43,6 @@ public class ChartActivity extends Activity {
         });
 
 
-        //전체차트로 이동
-      /*button_to_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch(v.getId()) {
-                    case R.id.button_to_all_chart:
-                        Intent intent = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
-                        startActivity(intent); break;
-                }
-            }
-        });*/
-
         bottomNav = (BottomNavigationView)findViewById(R.id.bottom_nav_in_chart);
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -66,8 +54,7 @@ public class ChartActivity extends Activity {
                         startActivity(AuthIntent);
                         break;
                     case R.id.action_to_all_view_left:
-                        Intent AuthIntent_left = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
-                        startActivity(AuthIntent_left);
+                        finish();
                         break;
                     case R.id.action_to_all_view_right:
                         Intent AuthIntent_right = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
