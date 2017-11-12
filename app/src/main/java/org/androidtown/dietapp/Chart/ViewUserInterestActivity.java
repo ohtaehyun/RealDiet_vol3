@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -106,10 +107,12 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
                     }
                 }
                 // 5개만 추린다다
+
                while(interestList.size()>5){
                     interestList.remove(interestList.size()-1);
                 }
                 order_by_frequency(interestList,0,interestList.size()-1);
+
 
                 adapter.notifyDataSetChanged();
             }

@@ -35,35 +35,50 @@ import java.util.List;
  * Created by zidru on 2017-09-27.
  */
 
+// 전체데이터를 꺾은선 그래프로 표현
 public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
+    // 뷰
     private ViewGroup layoutGraphView;
     private ViewGroup GraphView;
     TextView textView;
-    List<FoodItem> datas = new ArrayList<>();
+
+    // 데이터 리스트들
+   List<FoodItem> datas = new ArrayList<>();
     int sum_of_calorie[];
+
+    //파이어베이스관련
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
+    DatabaseReference historyRef;
+    DatabaseReference userRef;
+    DatabaseReference RootRef;
+
+    // 유저칼로리, 날짜
     int user_calorie;
     int dates;
 
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
+        //초기화
         dates=0;
         sum_of_calorie = new int[30];
 
+        //뷰 선언
         layoutGraphView = (ViewGroup) inflater.inflate(R.layout.activity_view_all_calendar, container, false);
         GraphView = (ViewGroup) layoutGraphView.findViewById((R.id.view_all_calendar_byline));
         textView = (TextView)layoutGraphView.findViewById(R.id.text_int_viewCalendar_by_line);
 
-        if (user != null) {
-        } else {
-        }
-        DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference userRef = RootRef.child("user").child(uid).child("basicCalorie");
+        // 데이터베이스레퍼런스
+        RootRef = FirebaseDatabase.getInstance().getReference();
+        userRef = RootRef.child("user").child(uid).child("basicCalorie");
+        historyRef = RootRef.child("userHistory").child(uid);
 
-        DatabaseReference historyRef = RootRef.child("userHistory").child(uid);
+        get_datas_and_makeChart();
 
+        return layoutGraphView;
+    }
+
+    private void get_datas_and_makeChart(){
         historyRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -73,6 +88,7 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
                     for(DataSnapshot snapshot2 : snapshot.getChildren()){
                         FoodItem data = snapshot2.getValue(FoodItem.class);
                         datas.add(data);
+                        // 히스토리안의 각각의 날짜에 있는 음식들의 칼로리를 합쳐 리스트에 추가.
                         setSum_of_calorie(j,getSum_of_calorie(j)+datas.get(i).getCalorie());
                         i++;
                     }
@@ -85,8 +101,8 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
                 userRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        // 유저칼로리 셋팅후 그래프출력.
                         int u_cal = dataSnapshot.getValue(int.class);
-                        Log.d("", "");
                         setUser_calorie(u_cal);
                         setLineGraph();
                     }
@@ -95,13 +111,10 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
                     }
                 });
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-        return layoutGraphView;
     }
 
     // make line graph
@@ -133,7 +146,6 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
             graph1[i] = sum_of_calorie[i];
             graph2[i] = getUser_calorie();
         }
-
         List<LineGraph> arrGraph = new ArrayList<LineGraph>();
 
         arrGraph.add(new LineGraph("Calorie", Color.RED, graph1));
@@ -152,22 +164,22 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
     }
 
     //getter and setter
-    public void setUser_calorie(int u_cal){
+    private void setUser_calorie(int u_cal){
         this.user_calorie = u_cal;
     }
-    public void setDates(int dates){
+    private void setDates(int dates){
         this.dates = dates;
     }
-    public int getUser_calorie(){
+    private int getUser_calorie(){
         return user_calorie;
     }
-    public int getDates(){
+    private int getDates(){
         return dates;
     }
-    public int getSum_of_calorie(int index) {
+    private int getSum_of_calorie(int index) {
         return sum_of_calorie[index];
     }
-    public void setSum_of_calorie(int index, int value){
+    private void setSum_of_calorie(int index, int value){
         sum_of_calorie[index] = value;
     }
 

@@ -35,13 +35,19 @@ import java.util.List;
  */
 
 public class ViewAllCalendarActivity_byPie extends android.support.v4.app.Fragment{
+    // 뷰
     private ViewGroup layoutGraphView;
     private ViewGroup GraphView;
+
+    // 리스트
     ArrayList<FoodItem> foods = new ArrayList<FoodItem>();
+
+    // 파이어베이스관련
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
+
+    //탄단지
     int carbo,protein,fat;
-    int user_calorie;
     TextView textView;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -54,16 +60,6 @@ public class ViewAllCalendarActivity_byPie extends android.support.v4.app.Fragme
         DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userRef = RootRef.child("user").child(uid).child("basicCalorie");
         final DatabaseReference historyRef = RootRef.child("userHistory").child(uid);
-
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user_calorie = dataSnapshot.getValue(int.class);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
 
         historyRef.addValueEventListener(new ValueEventListener() {
             @Override

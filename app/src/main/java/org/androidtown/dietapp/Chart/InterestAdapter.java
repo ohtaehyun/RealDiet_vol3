@@ -18,7 +18,7 @@ import org.androidtown.dietapp.R;
 
 import java.util.List;
 
-
+// ViewUserInterestActivity 리사이클려뷰 어댑터
 public class InterestAdapter extends RecyclerView.Adapter<InterestAdapter.FoodViewHolder>{
 
     private List<FoodItem> historyList;
