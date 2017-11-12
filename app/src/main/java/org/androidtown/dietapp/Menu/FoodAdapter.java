@@ -20,6 +20,7 @@ import org.androidtown.dietapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder>{
@@ -82,6 +83,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         TextView textName,textCategory,textCal,textProtain,textCarbohydrate,textFat;
         ImageView imageViewItems;
         FoodItem food;
+        String key;
+        DatabaseReference ref;
 
         public FoodViewHolder(View itemView){
             super(itemView);
@@ -95,15 +98,18 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
             imageViewItems=(ImageView)itemView.findViewById(R.id.imageViewItems);
             food = new FoodItem();
 
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
                     Snackbar.make(v,textName.getText()+" 선택",Snackbar.LENGTH_LONG).setAction("add to history", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if(historyRef!=null){
-                                historyRef.push().setValue(food);
+
+                                key = UUID.randomUUID().toString();
+                                food.setKey(key);
+                                historyRef.child(key).setValue(food);
                             }
                         }
                     }).show();
