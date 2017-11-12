@@ -85,14 +85,27 @@
         android:textAlignment="viewStart"
         android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/editTextGender"
+    <RadioGroup
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Gender" />
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioButtonMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/radioButtonFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Female" />
+
+    </RadioGroup>
 
     <Space
         android:layout_width="match_parent"

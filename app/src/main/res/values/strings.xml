@@ -89,4 +89,6 @@
         completions."
     </string>
     <string name="title_activity_login">Sign in</string>
+    <string name="female">Female</string>
+    <string name="Male">Male</string>
 </resources>

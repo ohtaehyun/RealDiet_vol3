@@ -16,14 +16,17 @@
 
 package org.androidtown.dietapp.Auth;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,15 +37,21 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.androidtown.dietapp.R;
 
-public class EmailPasswordActivity extends BaseActivity implements
+public class EmailPasswordActivity extends Activity implements
         View.OnClickListener {
+    /*
+    TODO:
+        디자인이 구림 나중에 업그레이드 해야할듯
+     */
+
 
     private static final String TAG = "EmailPassword";
 
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
+
+    @VisibleForTesting
+    public ProgressDialog mProgressDialog;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -51,6 +60,7 @@ public class EmailPasswordActivity extends BaseActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_emailpassword);
 
         // Views
@@ -132,7 +142,6 @@ public class EmailPasswordActivity extends BaseActivity implements
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            //내가 만든 부분
                             Intent UserInfoIntent=new Intent(EmailPasswordActivity.this,UserInfoActivity.class);
                             startActivity(UserInfoIntent);
                             finish();
@@ -146,7 +155,6 @@ public class EmailPasswordActivity extends BaseActivity implements
 
                         // [START_EXCLUDE]
                         if (!task.isSuccessful()) {
-                            mStatusTextView.setText(R.string.auth_failed);
                         }
                         hideProgressDialog();
                         // [END_EXCLUDE]
@@ -241,4 +249,29 @@ public class EmailPasswordActivity extends BaseActivity implements
             sendEmailVerification();
         }
     }
+
+
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        hideProgressDialog();
+    }
+
 }

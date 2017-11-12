@@ -31,7 +31,10 @@
         <activity android:name=".Chart.ChartActivity" />
         <activity android:name=".Chart.ViewCalendarActivity" />
         <activity android:name=".Chart.ViewHistoryDataActivity"/>
-        <activity android:name=".Auth.EmailPasswordActivity" />
+        <activity
+            android:name=".Auth.EmailPasswordActivity"
+            android:theme="@android:style/Theme.Dialog"
+            />
         <activity android:name=".Auth.UserInfoActivity" />
         <activity android:name=".Menu.MenuActivity" />
         <activity android:name=".Menu.ItemAddActivity" />

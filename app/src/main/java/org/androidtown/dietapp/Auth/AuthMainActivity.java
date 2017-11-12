@@ -1,5 +1,6 @@
 package org.androidtown.dietapp.Auth;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -7,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -48,11 +51,18 @@ import java.util.Map;
 
 import static com.kakao.util.helper.Utility.getPackageInfo;
 
-public class AuthMainActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
-
+public class AuthMainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+    /*
+    TODO:
+        구글 로그인 후 카카오톡 로그인이 안되는 오류는 발견
+        그리고 못고칠듯 ㅋ 너무 깊숙함
+     */
     GoogleApiClient mGoogleApiClient;
     FirebaseAuth mAuth;
     LoginButton loginButton;
+
+    @VisibleForTesting
+    public ProgressDialog mProgressDialog;
 
     private static final int RC_SIGN_IN = 9001;
     String TAG = "AuthMain";
@@ -62,6 +72,8 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_main);
 
+
+        Log.d(TAG,"현재 토큰값 로그아웃을 하긴 함"+Session.getCurrentSession().getAccessToken());
         // [START KAKAO SIGN IN]
         loginButton = (LoginButton) findViewById(R.id.login_button);
         // [START initialize_auth]
@@ -98,7 +110,6 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.emailButton:
                 startActivity(new Intent(AuthMainActivity.this,EmailPasswordActivity.class));
-                finish();
                 break;
 
         }
@@ -146,6 +157,7 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            hideProgressDialog();
                             goToUserInfo();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -160,15 +172,16 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
         if(mAuth.getCurrentUser()!=null){
             super.onBackPressed();
         }
+        getKeyHash(this);
     }
 
     ///카카오톡 메소드 시작
-    ///KAKAOTALK METHOD START
-    /**
-     *
-     * @param kakaoAccessToken Access token retrieved after successful Kakao Login
-     * @return Task object that will call validation server and retrieve firebase token
+    /*
+
+
+
      */
+    ///KAKAOTALK METHOD START
     private Task<String> getFirebaseJwt(final String kakaoAccessToken) {
         final TaskCompletionSource<String> source = new TaskCompletionSource<>();
 
@@ -212,6 +225,7 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
      */
     private class KakaoSessionCallback implements ISessionCallback {
 
+
         @Override
         public void onSessionOpened() {
             showProgressDialog();
@@ -228,6 +242,7 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         onStop();
+                        hideProgressDialog();
                         goToUserInfo();
                     } else {
                         Toast.makeText(getApplicationContext(), "Failed to create a Firebase user.", Toast.LENGTH_LONG).show();
@@ -243,7 +258,7 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
             if (exception != null) {
-                Log.e(TAG, exception.toString());
+                Log.e(TAG, "카톡 세션이 안열림"+exception.toString());
             }
         }
     }
@@ -273,9 +288,37 @@ public class AuthMainActivity extends BaseActivity implements View.OnClickListen
     ///KAKAOTALK METHOD END
 
 
+
+
+    //유저 정보창으로 이동
     public void goToUserInfo(){
         Intent UserInfoIntenet=new Intent(AuthMainActivity.this,UserInfoActivity.class);
         startActivity(UserInfoIntenet);
         finish();
+    }
+
+    /*
+    진행되고 있는지 안되는 지를 알려주는 다이얼로그
+                                             쓰실분은 쓰세영
+     */
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        hideProgressDialog();
     }
 }
