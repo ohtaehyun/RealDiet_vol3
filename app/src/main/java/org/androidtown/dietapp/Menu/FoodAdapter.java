@@ -106,7 +106,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
                         @Override
                         public void onClick(View v) {
                             if(historyRef!=null){
-
                                 key = UUID.randomUUID().toString();
                                 food.setKey(key);
                                 historyRef.child(key).setValue(food);

@@ -16,6 +16,7 @@ public class FoodItem implements Comparable<FoodItem>{
     private String uid;
     private int frequency;
     private String key;
+    private String barcode;
 
     public String getKey() {
         return key;
@@ -39,6 +40,7 @@ public class FoodItem implements Comparable<FoodItem>{
         this.protein = protein;
         this.calorie = calorie;
         key="1";
+        barcode="";
     }
 
     @Override
@@ -111,6 +113,14 @@ public class FoodItem implements Comparable<FoodItem>{
     public int getFrequency(){ return frequency; }
 
     public void plusFrequency(){ setFrequency(getFrequency()+1);}
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
 
     //getter setter end
 
