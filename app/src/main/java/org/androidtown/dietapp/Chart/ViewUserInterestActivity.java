@@ -63,7 +63,7 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
         // 리사이클러뷰
         recyclerView = (RecyclerView)layoutGraphView.findViewById(R.id.interest_list);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager lim = new LinearLayoutManager(this.getContext());
+        LinearLayoutManager lim = new LinearLayoutManager(getActivity());
         lim.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(lim);
         adapter = new InterestAdapter(interestList);
@@ -99,7 +99,6 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
                         }else { interestList.add(foodItem);interestList.get(0).setFrequency(1);}
                     }
                 }
-
                while(interestList.size()>5){
                     interestList.remove(interestList.size()-1);
                 }
@@ -130,34 +129,6 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
             }
         }
         return the_charge;
-    }
-
-    //퀵정렬
-    private void order_by_frequency(List<FoodItem> L, int p, int r){
-        int q=0;
-        if(p<r){
-            q= partition(L, p, r);
-            order_by_frequency(L,p,q-1);
-            order_by_frequency(L,q+1,r);
-        }
-    }
-
-    private int partition(List<FoodItem> L, int p, int r){
-        FoodItem temp = new FoodItem();
-        int x = L.get(p).getFrequency();
-        int i= p-1;
-        for(int j=p; j<r-1; j++){
-            if(L.get(j).getFrequency() <= x){
-                temp = L.get(j);
-                L.set(j,L.get(j+1));
-                L.set(j+1,temp);
-
-            }
-        }
-        temp = L.get(r);
-        L.set(r,L.get(i+1));
-        L.set(i+1,temp);
-        return i+1;
     }
 
 }

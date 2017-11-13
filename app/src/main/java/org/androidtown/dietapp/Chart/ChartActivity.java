@@ -42,8 +42,10 @@ public class ChartActivity extends Activity {
             }
         });
 
-
         bottomNav = (BottomNavigationView)findViewById(R.id.bottom_nav_in_chart);
+
+        // 현재 같이 쓰고있는 바텀내비게이션은 1개의 메뉴만 만들면 너무 휑해서
+        // 야매로 아래와 같이 조치함.
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -54,7 +56,8 @@ public class ChartActivity extends Activity {
                         startActivity(AuthIntent);
                         break;
                     case R.id.action_to_all_view_left:
-                        finish();
+                        Intent AuthIntent_left = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
+                        startActivity(AuthIntent_left);
                         break;
                     case R.id.action_to_all_view_right:
                         Intent AuthIntent_right = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);

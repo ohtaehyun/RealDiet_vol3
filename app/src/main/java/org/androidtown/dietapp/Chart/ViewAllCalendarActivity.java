@@ -3,6 +3,8 @@
 package org.androidtown.dietapp.Chart;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,6 +59,16 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
     int user_calorie;
     int dates;
 
+    // 프래그먼트 구조상 분리될때 컨텍스트를 null로 반환해서 여러 에러가 생김;
+    // 이를 해결하기 위해 onAttach에서 액티비티와 연결
+    private Activity activity;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof Activity){
+            activity = (Activity) context;
+        }
+    }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         //초기화
@@ -186,6 +198,7 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
     //set drawing graph
     private void setLineGraph() {
         LineGraphVO vo = makeLineGraphAllSetting();
-        GraphView.addView(new LineGraphView(getContext(), vo));
+
+        GraphView.addView(new LineGraphView(activity, vo));
     }
 }

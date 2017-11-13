@@ -3,9 +3,12 @@
 package org.androidtown.dietapp.Chart;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +53,21 @@ public class ViewAllCalendarActivity_byPie extends android.support.v4.app.Fragme
     int carbo,protein,fat;
     TextView textView;
 
+    // 프래그먼트 구조상 분리될때 컨텍스트를 null로 반환해서 여러 에러가 생김;
+    // 이를 해결하기 위해 onAttach에서 액티비티와 연결
+    private Activity activity;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof Activity){
+            activity = (Activity) context;
+        }
+    }
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         layoutGraphView = (ViewGroup) inflater.inflate(R.layout.activity_view_all_calendar_bypie, container, false);
-       GraphView = (ViewGroup) layoutGraphView.findViewById((R.id.view_all_calendar_bypie));
+        GraphView = (ViewGroup) layoutGraphView.findViewById((R.id.view_all_calendar_bypie));
         textView = (TextView)layoutGraphView.findViewById(R.id.text_int_viewCalendar_by_pie);
 
 
@@ -115,12 +129,13 @@ public class ViewAllCalendarActivity_byPie extends android.support.v4.app.Fragme
     }
     // drawing circle graph
     private void setCircleGraph() {
-        CircleGraphVO vo = makeLineGraphAllSetting();
-        GraphView.addView(new CircleGraphView(getContext(),vo));
+        CircleGraphVO vo = makeCircleGraphAllSetting();
+        GraphView.addView(new CircleGraphView(activity,vo));
+
     }
 
     // make circle graph
-    private CircleGraphVO makeLineGraphAllSetting() {
+    private CircleGraphVO makeCircleGraphAllSetting() {
         //BASIC LAYOUT SETTING
         //padding
         int paddingBottom 	= CircleGraphVO.DEFAULT_PADDING;
