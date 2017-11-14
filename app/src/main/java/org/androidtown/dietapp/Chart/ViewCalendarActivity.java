@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,34 +36,45 @@ import java.util.List;
  */
 
 public class ViewCalendarActivity extends AppCompatActivity {
+    // 파이어베이스관련
+    private DatabaseReference UserHistory;
     private DatabaseReference mDatabase;
 
     //탄단지
-    float rat_carbo, rat_protein, rat_fat;
-    int carbo,protein,fat;
+    private float rat_carbo, rat_protein, rat_fat;
+    private int carbo,protein,fat;
 
     // 파이어베이스에 검색할 날짜
-    String date;
+    private String date;
 
-    // 탄단지 합계및,
-    int sum = 0;
+    // 탄단지 합계및, 초기화
+    private int sum = 0;
 
     //  뷰
     private ViewGroup layoutGraphView;
-    TextView textView;
+    private TextView textView;
+
+    // 리사이클러뷰 관련
+    private ChartAdapter adapter;
+    private RecyclerView recyclerView;
+    private ArrayList<FoodItem> theDayfoods;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
+        // 뷰 설정
         setContentView(R.layout.activity_view_calender);
         textView = (TextView)findViewById(R.id.message_to_calender_viewer);
-
         layoutGraphView = (ViewGroup) findViewById(R.id.pie_chart);
+
+        theDayfoods = new ArrayList<>();
+
+        // 파이어베이스 설정
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        DatabaseReference userData = mDatabase.child("user").child(user.getUid());
+        // 레퍼런스설정
         DatabaseReference userHistoryRef = mDatabase.child("userHistory").child(user.getUid());
 
         // 인텐트로 넘어온 날짜값을 받아 문자열로 제작
@@ -78,32 +91,49 @@ public class ViewCalendarActivity extends AppCompatActivity {
             date = String.valueOf(year)+String.valueOf(month)+"0"+String.valueOf(day);
         }else date = String.valueOf(year)+String.valueOf(month)+String.valueOf(day);
 
-        // 완성된 날짜를 이용한 레퍼런스생성
-        DatabaseReference UserHistory = userHistoryRef.child(date);
+        // 완성된 날짜를 이용한 레퍼런스완성
+        UserHistory = userHistoryRef.child(date);
 
+        // 리사이클러뷰
+        recyclerView = (RecyclerView)findViewById(R.id.calendar_list);
+        LinearLayoutManager lim = new LinearLayoutManager(this);
+        lim.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(lim);
+        adapter = new ChartAdapter(theDayfoods);
+        recyclerView.setAdapter(adapter);
+
+        set_chart();
+    }
+
+    // 화면출력
+    private void set_chart(){
+        if(UserHistory == null){
+        }else {
         UserHistory.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // 탄단지 초기화 및 리스트 초기화
-                setzero();
-                int i=0;
+                setzero(); theDayfoods.clear();
                 // 해당날짜에 데이터가 있을경우에만 fooditem을 받아와 리스트에 등록.
                 if(dataSnapshot.exists())
                 {
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         FoodItem foodItem = snapshot.getValue(FoodItem.class);
+                        theDayfoods.add(foodItem);
                         setCarbo(getCarbo() + foodItem.getCarbohydrate());
                         setProtein(getProtein() + foodItem.getProtein());
                         setFat(getFat() + foodItem.getFat());
                         setSum(sum + getCarbo() + getFat() + getProtein());
                     }
                     setCircleGraph();
+                    adapter.notifyDataSetChanged();
+
+                    // 비율설정
                     rat_carbo =( (float)getCarbo()/ (float)getSum())*100;
                     rat_fat = ( (float)getFat()/ (float)getSum())*100;
                     rat_protein = ( (float)getProtein()/ (float)getSum())*100;
 
                     theAdvise();
-
                 }else{
                     Toast.makeText(getApplicationContext(), "선택하신 날짜에는 먹은 음식이 없습니다.", Toast.LENGTH_SHORT).show();
                     finish();
@@ -113,11 +143,11 @@ public class ViewCalendarActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
+        }
     }
 
     // 조언
-    public void theAdvise(){
+    private void theAdvise(){
         if(rat_carbo>=45){
             textView.setText("too many 탄수화물");
         }else if(rat_protein>=60){
@@ -133,6 +163,7 @@ public class ViewCalendarActivity extends AppCompatActivity {
         }else textView.setText("적당히 균형잡힌 식단이군요.");
     }
 
+    // draw cicle graph
     private void setCircleGraph() {
         CircleGraphVO vo = makeLineGraphAllSetting();
         layoutGraphView.addView(new CircleGraphView(this,vo));

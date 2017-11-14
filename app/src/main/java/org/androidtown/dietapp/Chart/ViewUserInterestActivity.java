@@ -76,7 +76,9 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
         DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         myHistoryRef = database.getReference().child("userHistory").child(uid);
 
+        // 목록이름
         Whatisit.setText("먹은 음식 TOP5");
+
         updateHistoryList();
 
         return layoutGraphView;

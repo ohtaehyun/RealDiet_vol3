@@ -20,9 +20,12 @@ import org.w3c.dom.Text;
 
 public class ViewHistoryDataActivity extends AppCompatActivity {
 
+    // 이동할 화면들
     ViewAllCalendarActivity view_line;
     ViewAllCalendarActivity_byPie view_pie;
     ViewUserInterestActivity view_interst;
+
+    // bottomnav
     private BottomNavigationView bottomNav;
 
     @Override

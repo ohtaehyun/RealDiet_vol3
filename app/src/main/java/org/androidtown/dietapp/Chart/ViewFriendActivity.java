@@ -19,9 +19,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.androidtown.dietapp.Auth.AuthMainActivity;
 import org.androidtown.dietapp.DTO.FoodItem;
 import org.androidtown.dietapp.DTO.FriendItem;
 import org.androidtown.dietapp.DTO.UsersItem;
+import org.androidtown.dietapp.Main.MainActivity;
 import org.androidtown.dietapp.R;
 
 import java.util.ArrayList;
@@ -33,11 +35,9 @@ import java.util.List;
 
 public class ViewFriendActivity extends AppCompatActivity{
     private BottomNavigationView bottomNav;
-    Intent AuthIntent;
 
     private RecyclerView recyclerView;
     private List<FriendItem> friendList;
-    private List<String> uidList;
     private FriendAdapter adapter;
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -51,10 +51,8 @@ public class ViewFriendActivity extends AppCompatActivity{
         //뷰
         setContentView(R.layout.activity_view_friends);
 
-
         // 리스트 초기화
         friendList = new ArrayList<>();
-        uidList = new ArrayList<>();
 
         // recycler view
         recyclerView = (RecyclerView)findViewById(R.id.friend_list);
@@ -68,7 +66,11 @@ public class ViewFriendActivity extends AppCompatActivity{
         // 파이어베이스
         database = FirebaseDatabase.getInstance();
         DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        userRef = database.getReference().child("user").child(uid);
+        userRef = database.getReference().child("friends").child(uid);
+
+        // 어댑터의 레퍼런스설정
+        adapter.setHistoryRef(userRef);
+
 
         bottomNav = (BottomNavigationView)findViewById(R.id.bottom_nav_in_friendview);
 
@@ -88,16 +90,21 @@ public class ViewFriendActivity extends AppCompatActivity{
         });
 
         updateHistoryList();
+
     }
 
     private void updateHistoryList() {
-        userRef.child("friend").addValueEventListener(new ValueEventListener() {
+        if(userRef==null){
+            return ;
+        }
+        userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                friendList.clear();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                    FriendItem friendItem = snapshot.getValue(FriendItem.class);
                    friendList.add(friendItem);
-               }
+                }
                 adapter.notifyDataSetChanged();
             }
             @Override
@@ -105,4 +112,5 @@ public class ViewFriendActivity extends AppCompatActivity{
             }
         });
     }
+
 }

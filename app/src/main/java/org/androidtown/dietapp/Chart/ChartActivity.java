@@ -5,20 +5,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CalendarView;
 
+import org.androidtown.dietapp.DTO.FoodItem;
+import org.androidtown.dietapp.Menu.FoodAdapter;
 import org.androidtown.dietapp.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zidru on 2017-09-18.
  */
 
 public class ChartActivity extends Activity {
-    Button button_to_all;
     private BottomNavigationView bottomNav;
     Intent AuthIntent;
+
 
     @Override
 
@@ -26,7 +33,7 @@ public class ChartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
 
-        //button_to_all = (Button) findViewById(R.id.button_to_all_chart);
+
 
         CalendarView calendar = (CalendarView) findViewById(R.id.calendar);
 

@@ -58,6 +58,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         FriendItem friendItem = friendList.get(position);
 
         holder.textName.setText(friendItem.getName());
+        holder.key = friendItem.getUid();
     }
 
     @Override
@@ -73,6 +74,20 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             super(itemView);
 
             textName=(TextView)itemView.findViewById(R.id.text_name_friend);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Snackbar.make(v,textName.getText()+" 선택",Snackbar.LENGTH_LONG).setAction("delete", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(historyRef!=null){
+                                historyRef.child(key).removeValue();
+                            }
+                        }
+                    }).show();
+                }
+            });
         }
     }
 }
