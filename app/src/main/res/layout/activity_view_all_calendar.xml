@@ -13,29 +13,25 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/view_all_calendar_byline"
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
+        android:layout_width="364dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_int_viewCalendar_by_line"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_int_viewCalendar_by_line"></android.support.constraint.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent"></android.support.constraint.ConstraintLayout>
 
 
     <TextView
-        android:layout_gravity="center"
-        android:background="@drawable/back"
         android:id="@+id/text_int_viewCalendar_by_line"
         android:layout_width="336dp"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="8dp"
+        android:layout_gravity="center"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:background="@drawable/back"
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"

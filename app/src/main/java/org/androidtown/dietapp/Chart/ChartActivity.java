@@ -18,6 +18,7 @@ import org.androidtown.dietapp.R;
 public class ChartActivity extends Activity {
     Button button_to_all;
     private BottomNavigationView bottomNav;
+    Intent AuthIntent;
 
     @Override
 
@@ -52,16 +53,16 @@ public class ChartActivity extends Activity {
                 switch (item.getItemId())
                 {
                     case R.id.action_to_all_view:
-                        Intent AuthIntent = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
+                        AuthIntent = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
                         startActivity(AuthIntent);
                         break;
                     case R.id.action_to_all_view_left:
-                        Intent AuthIntent_left = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
-                        startActivity(AuthIntent_left);
+                        AuthIntent = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
+                        startActivity(AuthIntent);
                         break;
                     case R.id.action_to_all_view_right:
-                        Intent AuthIntent_right = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
-                        startActivity(AuthIntent_right);
+                        AuthIntent = new Intent(ChartActivity.this, ViewHistoryDataActivity.class);
+                        startActivity(AuthIntent);
                         break;
                 }
                 return true;

@@ -7,8 +7,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import org.androidtown.dietapp.R;
+import org.w3c.dom.Text;
 
 
 /**
@@ -18,9 +20,9 @@ import org.androidtown.dietapp.R;
 
 public class ViewHistoryDataActivity extends AppCompatActivity {
 
-     ViewAllCalendarActivity view_line;
-     ViewAllCalendarActivity_byPie view_pie;
-     ViewUserInterestActivity view_interst;
+    ViewAllCalendarActivity view_line;
+    ViewAllCalendarActivity_byPie view_pie;
+    ViewUserInterestActivity view_interst;
     private BottomNavigationView bottomNav;
 
     @Override
@@ -34,7 +36,7 @@ public class ViewHistoryDataActivity extends AppCompatActivity {
         view_interst = new ViewUserInterestActivity();
 
         // 초기화면
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_of_historyview, view_interst).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_of_historyview, view_line).commit();
 
         // bottomnavi 설정
         bottomNav = (BottomNavigationView)findViewById(R.id.bottom_nav_in_chartview);

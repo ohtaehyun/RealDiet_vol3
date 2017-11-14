@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.androidtown.dietapp.Auth.AuthMainActivity;
 import org.androidtown.dietapp.Auth.UserInfoActivity;
 import org.androidtown.dietapp.Chart.ChartActivity;
+import org.androidtown.dietapp.Chart.ViewFriendActivity;
 import org.androidtown.dietapp.DTO.FoodItem;
 import org.androidtown.dietapp.Menu.MenuActivity;
 import org.androidtown.dietapp.R;
@@ -140,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
                         Intent chartIntent = new Intent(MainActivity.this,ChartActivity.class);
                         startActivity(chartIntent);
                         break;
+                    case R.id.action_friend:
+                        Intent friendIntent = new Intent(MainActivity.this,ViewFriendActivity.class);
+                        startActivity(friendIntent);
                 }
                 return true;
             }

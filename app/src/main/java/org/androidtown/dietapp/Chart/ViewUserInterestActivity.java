@@ -37,6 +37,7 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
     private ViewGroup layoutGraphView;
     private ViewGroup GraphView;
     TextView textView;
+    TextView Whatisit;
 
     //파이어베이스
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -56,6 +57,7 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
         layoutGraphView = (ViewGroup) inflater.inflate(R.layout.activity_view_user_interest, container, false);
         GraphView = (ViewGroup) layoutGraphView.findViewById((R.id.view_user_interest));
         textView = (TextView)layoutGraphView.findViewById(R.id.text_in_viewUser_interest);
+        Whatisit = (TextView)layoutGraphView.findViewById(R.id.Whatisit);
 
         // 리스트 객체생성
         interestList=new ArrayList<>();
@@ -73,11 +75,13 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
         DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         myHistoryRef = database.getReference().child("userHistory").child(uid);
 
+        Whatisit.setText("먹은 음식 TOP5");
         updateHistoryList();
 
         return layoutGraphView;
     }
 
+    // 먹은음식 top5 추리고 정렬. 리스트뷰에 표현.
     private void updateHistoryList() {
         if (myHistoryRef == null) {
             return;
@@ -99,18 +103,20 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
                         }else { interestList.add(foodItem);interestList.get(0).setFrequency(1);}
                     }
                 }
-               while(interestList.size()>5){
-                    interestList.remove(interestList.size()-1);
-                }
-                adapter.notifyDataSetChanged();
-            }
 
+                quickSort(interestList, 0, interestList.size()-1);
+
+                while(interestList.size()>5)  interestList.remove(interestList.size()-1);
+
+                 adapter.notifyDataSetChanged();
+            }
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
     }
 
+    // 같은 "이름"의 음식이 존재하는지 판정 및 반환
     private boolean searching_food_uid(List<FoodItem> L, FoodItem f){
         for(int i=0; i<L.size(); i++){
             if(L.get(i).getName().equals(f.getName())){
@@ -119,7 +125,6 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
         }
         return false;
     }
-
     private int searching_food_uid_i(List<FoodItem> L, FoodItem f){
         int the_charge=0;
         for(int i=0; i<L.size(); i++){
@@ -131,4 +136,33 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
         return the_charge;
     }
 
+
+    // quick sort
+    public static int partition(List<FoodItem> L, int left, int right) {
+        int pivot = L.get((left + right) / 2).getFrequency();
+
+        while (left < right) {
+            while ((L.get(left).getFrequency() > pivot) && (left < right))
+                left++;
+            while ((L.get(right).getFrequency() < pivot) && (left < right))
+                right--;
+
+            if (left < right) {
+                FoodItem temp = L.get(left);
+                L.set(left,L.get(right));
+                L.set(right,temp);
+                left++; right--;
+            }
+        }
+        return left;
+    }
+    public static void quickSort(List<FoodItem> L, int left, int right) {
+
+        if (left < right) {
+            int pivotNewIndex = partition(L, left, right);
+            quickSort(L, left, pivotNewIndex - 1);
+            quickSort(L, pivotNewIndex + 1, right);
+        }
+
+    }
 }

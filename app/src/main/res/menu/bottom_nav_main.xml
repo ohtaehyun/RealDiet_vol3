@@ -25,4 +25,11 @@
         android:title="Chart"
         app:showAsAction="ifRoom"></item>
 
+    <item
+        android:id="@+id/action_friend"
+        android:enabled="true"
+        android:icon="@drawable/ic_person_white"
+        android:title="Friend"
+        app:showAsAction="ifRoom"></item>
+
 </menu>

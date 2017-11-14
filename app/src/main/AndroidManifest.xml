@@ -42,6 +42,7 @@
         <activity android:name=".Auth.UserInfoActivity" />
         <activity android:name=".Menu.MenuActivity" />
         <activity android:name=".Menu.ItemAddActivity" />
+        <activity android:name=".Chart.ViewFriendActivity"/>
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />

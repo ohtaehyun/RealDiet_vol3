@@ -55,6 +55,8 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
     DatabaseReference userRef;
     DatabaseReference RootRef;
 
+    Bundle bundle;
+
     // 유저칼로리, 날짜
     int user_calorie;
     int dates;
@@ -62,6 +64,9 @@ public class ViewAllCalendarActivity extends android.support.v4.app.Fragment{
     // 프래그먼트 구조상 분리될때 컨텍스트를 null로 반환해서 여러 에러가 생김;
     // 이를 해결하기 위해 onAttach에서 액티비티와 연결
     private Activity activity;
+
+    TextView testtext;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
