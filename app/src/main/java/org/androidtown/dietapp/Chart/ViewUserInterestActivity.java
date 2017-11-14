@@ -71,6 +71,7 @@ public class ViewUserInterestActivity extends android.support.v4.app.Fragment{
         adapter = new InterestAdapter(interestList);
         recyclerView.setAdapter(adapter);
 
+        // 파이어베이스
         database = FirebaseDatabase.getInstance();
         DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         myHistoryRef = database.getReference().child("userHistory").child(uid);
