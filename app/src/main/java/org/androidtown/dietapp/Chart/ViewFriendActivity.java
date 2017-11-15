@@ -1,5 +1,6 @@
 package org.androidtown.dietapp.Chart;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kakao.kakaolink.KakaoLink;
+import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 
 import org.androidtown.dietapp.Auth.AuthMainActivity;
 import org.androidtown.dietapp.DTO.FoodItem;
@@ -39,11 +42,12 @@ public class ViewFriendActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
     private List<FriendItem> friendList;
     private FriendAdapter adapter;
-
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private final Context context=this;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();//<-user가 바뀔수도 있으니 이런 코드는 가능하면 쓰지마요
     private FirebaseDatabase database;
     private DatabaseReference userRef;
-    String uid = user.getUid();
+    String uid = user.getUid();//<-이하 동문 시스템짤때 유연해 지지가 않아요
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +85,7 @@ public class ViewFriendActivity extends AppCompatActivity{
                     case R.id.action_friend_left:
                         break;
                     case R.id.action_add_friend:
+                        shareKakao(context);
                         break;
                     case R.id.action_friend_right:
                         break;
@@ -111,6 +116,17 @@ public class ViewFriendActivity extends AppCompatActivity{
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    public void shareKakao(final Context context){
+        try{
+            final KakaoLink kakaolink = KakaoLink.getKakaoLink(context);
+            final KakaoTalkLinkMessageBuilder kakaoBulder = kakaolink.createKakaoTalkLinkMessageBuilder();
+            kakaoBulder.addAppButton("친구 추가 혹은 앱 다운로드");
+            kakaolink.sendMessage(kakaoBulder,this);
+        }catch (Exception e){
+            Log.d("FRIENACTIVITY",e.getMessage()+e.getCause());
+        }
     }
 
 }

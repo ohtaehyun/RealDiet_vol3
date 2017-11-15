@@ -26,11 +26,16 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="b9108987bce20dc0309ae264019a2e00"/>
         <activity android:name=".Main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
 
+                    <data android:scheme="@string/kakao_scheme"
+                        android:host="@string/kakaolink_host" />
+                </intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Chart.ChartActivity" />
         <activity android:name=".Chart.ViewCalendarActivity" />
